@@ -12,15 +12,6 @@ app.use(express.json());
 
 app.use("/api/health", healthRoutes);
 
-app.use((err, req, res, next) => {
-  console.error("Unhandled server error:", err.message);
-
-  res.status(500).json({
-    status: "error",
-    message: "Internal server error",
-  });
-});
-
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
