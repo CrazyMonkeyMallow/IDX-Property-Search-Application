@@ -12,6 +12,8 @@ router.get("/", async (req, res) => {
       database: "connected",
     });
   } catch (error) {
+    console.error("Database health check failed:", error.message);
+
     res.status(500).json({
       status: "error",
       database: "disconnected",
