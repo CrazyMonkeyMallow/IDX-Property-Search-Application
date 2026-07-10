@@ -10,7 +10,8 @@ const selectColumns = `
   L_SystemPrice AS price,
   L_Keyword2 AS beds,
   LM_Dec_3 AS baths,
-  LM_Int2_3 AS sqft
+  LM_Int2_3 AS sqft,
+  L_Photos AS photos
 `;
 
 function parseNumber(value, name) {
