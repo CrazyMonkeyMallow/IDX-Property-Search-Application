@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f4f7f9;
+  color: #17202d;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.listings-page {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.property-count {
+  margin: 0 0 16px;
+  color: #5a6878;
+  font-weight: 650;
+}
+
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.property-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(23, 32, 45, 0.07);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.property-card:hover {
+  border-color: #aab8c8;
+  box-shadow: 0 14px 34px rgba(23, 32, 45, 0.13);
+  transform: translateY(-3px);
+}
+
+.property-card__media {
+  aspect-ratio: 4 / 3;
+  background: #e6ecf2;
+}
+
+.property-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-card__placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: #66778a;
+  font-weight: 700;
+}
+
+.property-card__content {
+  padding: 16px;
+}
+
+.property-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+}
+
+.property-card__address,
+.property-card__location {
+  margin: 0;
+}
+
+.property-card__address {
+  min-height: 44px;
+  font-weight: 650;
+}
+
+.property-card__location {
+  margin-top: 4px;
+  color: #5a6878;
+}
+
+.property-card__facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.property-card__facts div {
+  padding: 10px;
+  background: #f4f7f9;
+  border-radius: 6px;
+}
+
+.property-card__facts dt {
+  color: #66778a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.property-card__facts dd {
+  margin: 3px 0 0;
+  font-weight: 750;
+}
+
+.status-panel {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  border-radius: 8px;
+  color: #5a6878;
+  font-weight: 650;
+}
+
+.status-panel--error {
+  color: #8b1d2c;
+  border-color: #f2b8c1;
+  background: #fff5f6;
+}
