@@ -1,41 +1,57 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
+import PropertyFilters from "../components/PropertyFilters";
 
 function ListingsPage() {
   const [properties, setProperties] = useState([]);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(20);
-
-  
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const requestId = useRef(0);
 
-  useEffect(() => {
-    async function loadProperties() {
-      try {
-        setIsLoading(true);
-        setErrorMessage("");
+  const loadProperties = useCallback(async (filters = {}) => {
+    const currentRequestId = ++requestId.current;
 
-        const data = await fetchProperties({ limit: 20, offset: 0 });
+    try {
+      setIsLoading(true);
+      setErrorMessage("");
 
+      const data = await fetchProperties({ ...filters, limit: 20, offset: 0 });
+
+      if (currentRequestId === requestId.current) {
         setProperties(data.results || []);
         setTotal(data.total || 0);
         setLimit(data.limit || 20);
-      } catch (error) {
+      }
+    } catch (error) {
+      if (currentRequestId === requestId.current) {
         setErrorMessage(error.message || "Unable to load properties");
-      } finally {
+        setProperties([]);
+        setTotal(0);
+      }
+    } finally {
+      if (currentRequestId === requestId.current) {
         setIsLoading(false);
       }
     }
-
-    loadProperties();
   }, []);
+
+  useEffect(() => {
+    loadProperties();
+  }, [loadProperties]);
 
   const visibleCount = Math.min(limit, properties.length);
 
   return (
     <main className="listings-page">
+      <h1>Property Search</h1>
+      <PropertyFilters
+        onSearch={loadProperties}
+        onClear={() => loadProperties()}
+      />
+
       {!isLoading && !errorMessage && (
         <p className="property-count">
           Showing {visibleCount} of {total} properties
@@ -50,9 +66,15 @@ function ListingsPage() {
 
       {!isLoading && !errorMessage && (
         <section className="property-grid" aria-label="Property results">
-          {properties.map((property) => (
-            <PropertyCard key={property.listingId} property={property} />
-          ))}
+          {properties.length > 0 ? (
+            properties.map((property) => (
+              <PropertyCard key={property.listingId} property={property} />
+            ))
+          ) : (
+            <p className="empty-state">
+              No properties found. Try changing or clearing your filters.
+            </p>
+          )}
         </section>
       )}
     </main>
