@@ -194,3 +194,39 @@ body {
   border: 1px solid #cccccc;
   border-radius: 4px;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  color: #222222;
+  background: #ffffff;
+  border: 1px solid #999999;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pagination button[aria-current="page"] {
+  color: #ffffff;
+  background: #222222;
+  border-color: #222222;
+}
+
+.pagination button:disabled {
+  color: #888888;
+  background: #eeeeee;
+  cursor: not-allowed;
+}
+
+.pagination__ellipsis {
+  min-width: 24px;
+  text-align: center;
+}

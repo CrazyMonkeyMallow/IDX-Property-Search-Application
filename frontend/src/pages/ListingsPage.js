@@ -2,28 +2,34 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
+import Pagination from "../components/Pagination";
 
 function ListingsPage() {
   const [properties, setProperties] = useState([]);
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(20);
+  const [activeFilters, setActiveFilters] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const requestId = useRef(0);
 
-  const loadProperties = useCallback(async (filters = {}) => {
+  const loadProperties = useCallback(async (filters, page) => {
     const currentRequestId = ++requestId.current;
 
     try {
       setIsLoading(true);
       setErrorMessage("");
 
-      const data = await fetchProperties({ ...filters, limit: 20, offset: 0 });
+      const data = await fetchProperties({
+        ...filters,
+        limit: itemsPerPage,
+        offset: (page - 1) * itemsPerPage,
+      });
 
       if (currentRequestId === requestId.current) {
         setProperties(data.results || []);
         setTotal(data.total || 0);
-        setLimit(data.limit || 20);
       }
     } catch (error) {
       if (currentRequestId === requestId.current) {
@@ -36,25 +42,42 @@ function ListingsPage() {
         setIsLoading(false);
       }
     }
-  }, []);
+  }, [itemsPerPage]);
 
   useEffect(() => {
-    loadProperties();
-  }, [loadProperties]);
+    loadProperties(activeFilters, currentPage);
+  }, [activeFilters, currentPage, loadProperties]);
 
-  const visibleCount = Math.min(limit, properties.length);
+  function handleSearch(filters) {
+    setActiveFilters(filters);
+    setCurrentPage(1);
+  }
+
+  function handleClear() {
+    setActiveFilters({});
+    setCurrentPage(1);
+  }
+
+  function handlePageChange(page) {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  }
+
+  const totalPages = Math.ceil(total / itemsPerPage);
+  const firstVisible = total === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const lastVisible = Math.min(currentPage * itemsPerPage, total);
 
   return (
     <main className="listings-page">
       <h1>Property Search</h1>
       <PropertyFilters
-        onSearch={loadProperties}
-        onClear={() => loadProperties()}
+        onSearch={handleSearch}
+        onClear={handleClear}
       />
 
       {!isLoading && !errorMessage && (
         <p className="property-count">
-          Showing {visibleCount} of {total} properties
+          Showing {firstVisible}-{lastVisible} of {total} properties
         </p>
       )}
 
@@ -65,17 +88,25 @@ function ListingsPage() {
       )}
 
       {!isLoading && !errorMessage && (
-        <section className="property-grid" aria-label="Property results">
-          {properties.length > 0 ? (
-            properties.map((property) => (
-              <PropertyCard key={property.listingId} property={property} />
-            ))
-          ) : (
-            <p className="empty-state">
-              No properties found. Try changing or clearing your filters.
-            </p>
-          )}
-        </section>
+        <>
+          <section className="property-grid" aria-label="Property results">
+            {properties.length > 0 ? (
+              properties.map((property) => (
+                <PropertyCard key={property.listingId} property={property} />
+              ))
+            ) : (
+              <p className="empty-state">
+                No properties found. Try changing or clearing your filters.
+              </p>
+            )}
+          </section>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </main>
   );

@@ -18,6 +18,10 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+beforeEach(() => {
+  window.scrollTo = jest.fn();
+});
+
 test("a newer search ignores results from an older request", async () => {
   fetchProperties.mockResolvedValueOnce({ total: 0, limit: 20, results: [] });
   render(<ListingsPage />);
@@ -55,4 +59,58 @@ test("a newer search ignores results from an older request", async () => {
   await waitFor(() => {
     expect(screen.queryByText("Old result")).not.toBeInTheDocument();
   });
+});
+
+test("page changes preserve filters and new filters reset to page one", async () => {
+  fetchProperties.mockImplementation((params) =>
+    Promise.resolve({
+      total: 60,
+      limit: 20,
+      results: [
+        {
+          listingId: `${params.city || "all"}-${params.offset}`,
+          address: `${params.city || "All"} page result`,
+        },
+      ],
+    })
+  );
+
+  render(<ListingsPage />);
+  await screen.findByText("Showing 1-20 of 60 properties");
+
+  const cityInput = screen.getByLabelText("City");
+  fireEvent.change(cityInput, { target: { value: "Austin" } });
+  fireEvent.click(screen.getByRole("button", { name: "Search" }));
+
+  await waitFor(() => {
+    expect(fetchProperties).toHaveBeenLastCalledWith({
+      city: "Austin",
+      limit: 20,
+      offset: 0,
+    });
+  });
+
+  fireEvent.click(screen.getByRole("button", { name: "2" }));
+
+  await waitFor(() => {
+    expect(fetchProperties).toHaveBeenLastCalledWith({
+      city: "Austin",
+      limit: 20,
+      offset: 20,
+    });
+  });
+  expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+  expect(screen.getByText("Showing 21-40 of 60 properties")).toBeInTheDocument();
+
+  fireEvent.change(cityInput, { target: { value: "Dallas" } });
+  fireEvent.click(screen.getByRole("button", { name: "Search" }));
+
+  await waitFor(() => {
+    expect(fetchProperties).toHaveBeenLastCalledWith({
+      city: "Dallas",
+      limit: 20,
+      offset: 0,
+    });
+  });
+  expect(screen.getByText("Showing 1-20 of 60 properties")).toBeInTheDocument();
 });
