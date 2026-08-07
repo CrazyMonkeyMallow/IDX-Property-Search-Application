@@ -44,3 +44,24 @@ export async function fetchPropertyDetail(id) {
 
   return response.json();
 }
+
+export async function fetchOpenHouses(id) {
+  const response = await fetch(
+    `/api/properties/${encodeURIComponent(id)}/openhouses`
+  );
+
+  if (!response.ok) {
+    let message = `Request failed with status ${response.status}`;
+
+    try {
+      const body = await response.json();
+      message = body.message || message;
+    } catch (error) {
+      message = response.statusText || message;
+    }
+
+    throw new Error(message);
+  }
+
+  return response.json();
+}

@@ -1,10 +1,21 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { fetchProperties } from "../api/client";
 import ListingsPage from "./ListingsPage";
 
 jest.mock("../api/client", () => ({
   fetchProperties: jest.fn(),
 }));
+
+function TestRouter({ children }) {
+  return (
+    <MemoryRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
+      {children}
+    </MemoryRouter>
+  );
+}
 
 function deferred() {
   let resolve;
@@ -24,7 +35,7 @@ beforeEach(() => {
 
 test("a newer search ignores results from an older request", async () => {
   fetchProperties.mockResolvedValueOnce({ total: 0, limit: 20, results: [] });
-  render(<ListingsPage />);
+  render(<ListingsPage />, { wrapper: TestRouter });
 
   await screen.findByText(/No properties found/);
 
@@ -75,7 +86,7 @@ test("page changes preserve filters and new filters reset to page one", async ()
     })
   );
 
-  render(<ListingsPage />);
+  render(<ListingsPage />, { wrapper: TestRouter });
   await screen.findByText("Showing 1-20 of 60 properties");
 
   const cityInput = screen.getByLabelText("City");

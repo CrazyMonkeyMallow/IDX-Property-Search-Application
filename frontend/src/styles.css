@@ -93,11 +93,18 @@ body {
 }
 
 .property-card {
+  position: relative;
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #999999;
   border-radius: 4px;
   transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.property-card__link {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
 }
 
 .property-card:hover {
@@ -109,6 +116,57 @@ body {
 .property-card__media {
   aspect-ratio: 4 / 3;
   background: #eeeeee;
+}
+
+.property-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.property-carousel__arrow,
+.lightbox__arrow,
+.lightbox__close {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  color: #ffffff;
+  font-size: 1.6rem;
+  background: rgba(0, 0, 0, 0.72);
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.property-carousel__arrow {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.property-carousel__arrow--previous,
+.lightbox__arrow--previous {
+  left: 8px;
+}
+
+.property-carousel__arrow--next,
+.lightbox__arrow--next {
+  right: 8px;
+}
+
+.property-carousel__counter,
+.lightbox__counter {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 4px 7px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.72);
+  border-radius: 3px;
 }
 
 .property-card__image {
@@ -229,4 +287,184 @@ body {
 .pagination__ellipsis {
   min-width: 24px;
   text-align: center;
+}
+
+.property-detail {
+  width: min(1000px, calc(100% - 20px));
+  margin: 0 auto;
+  padding: 16px 0 40px;
+}
+
+.back-button {
+  margin-bottom: 16px;
+  padding: 9px 12px;
+  color: #222222;
+  background: #ffffff;
+  border: 1px solid #999999;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.property-gallery__main {
+  display: block;
+  width: 100%;
+  padding: 0;
+  aspect-ratio: 16 / 9;
+  background: #eeeeee;
+  border: 0;
+  cursor: zoom-in;
+}
+
+.property-gallery__main img,
+.lightbox img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.property-gallery__thumbnails {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-bottom: 5px;
+  overflow-x: auto;
+}
+
+.property-gallery__thumbnails button {
+  flex: 0 0 92px;
+  height: 64px;
+  padding: 0;
+  background: #eeeeee;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.property-gallery__thumbnails button.is-active {
+  border-color: #222222;
+}
+
+.property-gallery__thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-gallery__placeholder {
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  background: #eeeeee;
+}
+
+.lightbox {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  padding: 52px;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.lightbox__close {
+  top: 12px;
+  right: 12px;
+}
+
+.lightbox__arrow {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.property-detail__header {
+  margin: 22px 0;
+}
+
+.property-detail__header h1,
+.property-detail__header p {
+  margin: 0;
+}
+
+.property-detail__header p {
+  margin-top: 6px;
+  font-size: 1.05rem;
+}
+
+.property-detail__stats,
+.property-details-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.property-detail__stats div,
+.property-details-list div {
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+}
+
+.property-detail dt {
+  color: #666666;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.property-detail dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.property-detail__section,
+.open-houses,
+.property-map {
+  margin-top: 28px;
+}
+
+.property-detail__section h2,
+.open-houses h2,
+.property-map h2 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+}
+
+.open-houses__list {
+  display: grid;
+  gap: 10px;
+}
+
+.open-houses__list article {
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+}
+
+.open-houses__list h3,
+.open-houses__list p {
+  margin: 0;
+}
+
+.open-houses__list p {
+  margin-top: 5px;
+}
+
+.property-map iframe {
+  display: block;
+  width: 100%;
+  height: 360px;
+  border: 0;
+}
+
+.property-map a {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .lightbox {
+    padding: 48px 12px;
+  }
 }

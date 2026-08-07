@@ -1,30 +1,5 @@
-function getFirstPhotoUrl(photos) {
-  if (!photos) {
-    return null;
-  }
-
-  if (Array.isArray(photos)) {
-    return typeof photos[0] === "string" && photos[0].trim() ? photos[0] : null;
-  }
-
-  if (typeof photos !== "string") {
-    return null;
-  }
-
-  try {
-    const parsedPhotos = JSON.parse(photos);
-
-    if (!Array.isArray(parsedPhotos) || parsedPhotos.length === 0) {
-      return null;
-    }
-
-    return typeof parsedPhotos[0] === "string" && parsedPhotos[0].trim()
-      ? parsedPhotos[0]
-      : null;
-  } catch (error) {
-    return null;
-  }
-}
+import { Link } from "react-router-dom";
+import PropertyImageCarousel from "./PropertyImageCarousel";
 
 function formatPrice(price) {
   const numericPrice = Number(price);
@@ -49,20 +24,18 @@ function formatFact(value) {
 }
 
 function PropertyCard({ property }) {
-  const photoUrl = getFirstPhotoUrl(property.photos);
-
   return (
     <article className="property-card">
+      <Link
+        className="property-card__link"
+        to={`/property/${encodeURIComponent(property.listingId)}`}
+        aria-label={`View ${property.address || "property"}`}
+      />
       <div className="property-card__media">
-        {photoUrl ? (
-          <img
-            className="property-card__image"
-            src={photoUrl}
-            alt={property.address || "Property"}
-          />
-        ) : (
-          <div className="property-card__placeholder">No photo</div>
-        )}
+        <PropertyImageCarousel
+          photos={property.photos}
+          alt={property.address || "Property"}
+        />
       </div>
 
       <div className="property-card__content">
