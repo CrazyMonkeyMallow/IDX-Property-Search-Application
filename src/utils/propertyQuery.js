@@ -1,5 +1,13 @@
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
+const DEFAULT_SORT_FIELD = "L_ListingID";
+const SORT_FIELDS = new Set([
+  "L_SystemPrice",
+  "ListingContractDate",
+  "LM_Int2_3",
+  "L_Keyword2",
+]);
+const SORT_ORDERS = new Set(["asc", "desc"]);
 
 const selectColumns = `
   L_ListingID AS listingId,
@@ -34,6 +42,17 @@ function buildPropertySearchQuery(query) {
 
   if (!Number.isInteger(offset) || offset < 0) {
     throw new Error("offset must be a number greater than or equal to 0");
+  }
+
+  const sortField = query.sortBy || DEFAULT_SORT_FIELD;
+  const sortOrder = query.sortOrder || "asc";
+
+  if (query.sortBy && !SORT_FIELDS.has(sortField)) {
+    throw new Error("sortBy is not a supported property column");
+  }
+
+  if (!SORT_ORDERS.has(sortOrder)) {
+    throw new Error("sortOrder must be asc or desc");
   }
 
   const conditions = [];
@@ -107,7 +126,7 @@ function buildPropertySearchQuery(query) {
         ${selectColumns}
       FROM rets_property
       ${whereSql}
-      ORDER BY L_ListingID
+      ORDER BY ${sortField} ${sortOrder.toUpperCase()}, L_ListingID
       LIMIT ? OFFSET ?
     `,
     resultsValues: [...values, limit, offset],
@@ -116,4 +135,5 @@ function buildPropertySearchQuery(query) {
 
 module.exports = {
   buildPropertySearchQuery,
+  SORT_FIELDS,
 };

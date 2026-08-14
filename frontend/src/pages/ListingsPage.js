@@ -10,6 +10,8 @@ function ListingsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [activeFilters, setActiveFilters] = useState({});
+  const [sortBy, setSortBy] = useState("L_SystemPrice");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const requestId = useRef(0);
@@ -25,6 +27,8 @@ function ListingsPage() {
         ...filters,
         limit: itemsPerPage,
         offset: (page - 1) * itemsPerPage,
+        sortBy,
+        sortOrder,
       });
 
       if (currentRequestId === requestId.current) {
@@ -42,7 +46,7 @@ function ListingsPage() {
         setIsLoading(false);
       }
     }
-  }, [itemsPerPage]);
+  }, [itemsPerPage, sortBy, sortOrder]);
 
   useEffect(() => {
     loadProperties(activeFilters, currentPage);
@@ -51,11 +55,15 @@ function ListingsPage() {
   function handleSearch(filters) {
     setActiveFilters(filters);
     setCurrentPage(1);
+    setSortBy("L_SystemPrice");
+    setSortOrder("asc");
   }
 
   function handleClear() {
     setActiveFilters({});
     setCurrentPage(1);
+    setSortBy("L_SystemPrice");
+    setSortOrder("asc");
   }
 
   function handlePageChange(page) {
@@ -74,6 +82,25 @@ function ListingsPage() {
         onSearch={handleSearch}
         onClear={handleClear}
       />
+
+      <div className="property-sorting" aria-label="Property sorting">
+        <label>
+          Sort by
+          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+            <option value="L_SystemPrice">Price</option>
+            <option value="ListingContractDate">Date listed</option>
+            <option value="LM_Int2_3">Square footage</option>
+            <option value="L_Keyword2">Beds</option>
+          </select>
+        </label>
+        <label>
+          Order
+          <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+            <option value="asc">Low to high</option>
+            <option value="desc">High to low</option>
+          </select>
+        </label>
+      </div>
 
       {!isLoading && !errorMessage && (
         <p className="property-count">

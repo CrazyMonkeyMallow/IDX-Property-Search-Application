@@ -34,3 +34,24 @@ test("invalid limit values return validation errors", () => {
     /limit must be a number between 1 and 100/
   );
 });
+
+test("builds a whitelisted sort expression", () => {
+  const queryParts = buildPropertySearchQuery({
+    sortBy: "L_SystemPrice",
+    sortOrder: "desc",
+  });
+
+  assert.match(queryParts.resultsSql, /ORDER BY L_SystemPrice DESC, L_ListingID/);
+});
+
+test("rejects invalid sort fields and directions", () => {
+  assert.throws(
+    () => buildPropertySearchQuery({ sortBy: "ListPrice" }),
+    /sortBy is not a supported property column/
+  );
+
+  assert.throws(
+    () => buildPropertySearchQuery({ sortOrder: "sideways" }),
+    /sortOrder must be asc or desc/
+  );
+});

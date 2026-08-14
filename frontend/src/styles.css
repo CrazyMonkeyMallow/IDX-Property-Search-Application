@@ -81,6 +81,29 @@ body {
   background: #ffffff;
 }
 
+.property-sorting {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+
+.property-sorting label {
+  display: grid;
+  gap: 5px;
+  color: #444444;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.property-sorting select {
+  height: 36px;
+  padding: 0 8px;
+  font: inherit;
+  background: #ffffff;
+  border: 1px solid #999999;
+  border-radius: 3px;
+}
+
 .property-count {
   margin: 0 0 16px;
   font-weight: 600;
@@ -251,6 +274,21 @@ body {
   text-align: center;
   border: 1px solid #cccccc;
   border-radius: 4px;
+}
+
+.error-boundary {
+  width: min(600px, calc(100% - 32px));
+  margin: 80px auto;
+  text-align: center;
+}
+
+.error-boundary button {
+  padding: 9px 14px;
+  color: #ffffff;
+  background: #222222;
+  border: 1px solid #222222;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .pagination {

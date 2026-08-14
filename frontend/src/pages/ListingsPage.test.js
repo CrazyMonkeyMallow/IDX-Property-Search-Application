@@ -98,6 +98,25 @@ test("page changes preserve filters and new filters reset to page one", async ()
       city: "Austin",
       limit: 20,
       offset: 0,
+      sortBy: "L_SystemPrice",
+      sortOrder: "asc",
+    });
+  });
+
+  fireEvent.change(screen.getByLabelText("Sort by"), {
+    target: { value: "ListingContractDate" },
+  });
+  fireEvent.change(screen.getByLabelText("Order"), {
+    target: { value: "desc" },
+  });
+
+  await waitFor(() => {
+    expect(fetchProperties).toHaveBeenLastCalledWith({
+      city: "Austin",
+      limit: 20,
+      offset: 0,
+      sortBy: "ListingContractDate",
+      sortOrder: "desc",
     });
   });
 
@@ -108,6 +127,8 @@ test("page changes preserve filters and new filters reset to page one", async ()
       city: "Austin",
       limit: 20,
       offset: 20,
+      sortBy: "ListingContractDate",
+      sortOrder: "desc",
     });
   });
   expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -121,6 +142,8 @@ test("page changes preserve filters and new filters reset to page one", async ()
       city: "Dallas",
       limit: 20,
       offset: 0,
+      sortBy: "L_SystemPrice",
+      sortOrder: "asc",
     });
   });
   expect(screen.getByText("Showing 1-20 of 60 properties")).toBeInTheDocument();

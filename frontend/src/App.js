@@ -4,7 +4,9 @@ import PropertyDetailPage from "./pages/PropertyDetailPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Routes>
         <Route path="/" element={<ListingsPage />} />
         <Route path="/property/:id" element={<PropertyDetailPage />} />
