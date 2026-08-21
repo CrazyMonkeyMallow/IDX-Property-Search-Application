@@ -167,7 +167,6 @@ npm test -- --watchAll=false --coverage
 
 Tests cover route success/error paths, every property filter, pagination, sorting, photo parsing, filter controls, property cards, and detail-page behavior. Coverage reports are written to `coverage/` directories.
 
-## Known Issues And Future Improvements
+## Known Issues
 
 - Some `L_Photos` URLs come from a protected third-party media service and may return `403` or `ERR_BLOCKED_BY_ORB` in a browser. (This is mainly because I am not in USA)
-- Future work could add request cancellation with `AbortController`, stronger database migrations, and server-side media proxying.
