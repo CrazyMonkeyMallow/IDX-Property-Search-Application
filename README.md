@@ -169,5 +169,5 @@ Tests cover route success/error paths, every property filter, pagination, sortin
 
 ## Known Issues And Future Improvements
 
-- Some `L_Photos` URLs come from a protected third-party media service and may return `403` or `ERR_BLOCKED_BY_ORB` in a browser. A production system should proxy authorized media or store approved image copies.
+- Some `L_Photos` URLs come from a protected third-party media service and may return `403` or `ERR_BLOCKED_BY_ORB` in a browser. (This is mainly because I am not in USA)
 - Future work could add request cancellation with `AbortController`, stronger database migrations, and server-side media proxying.
