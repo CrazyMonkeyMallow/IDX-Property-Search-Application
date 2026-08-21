@@ -1,14 +1,14 @@
 # IDX Property Search Application
 
 ## Overview
-
 This project is a full-stack real-estate search application. Users can filter, sort, paginate, and open a property detail page with photos, open houses, and an optional Google Maps location.
 
 The main UI is available at `http://localhost:3000`. The backend API runs at `http://localhost:5000`.
 
 ### Screenshot
+Run the frontend locally and open `http://localhost:3000` to view the Listings page. 
+![Property listings screenshot](screenshot.png)
 
-Run the frontend locally and open `http://localhost:3000` to view the Listings page. The application includes a filter form, sort controls, property cards, and pagination. A screenshot can be captured from that page with the browser's developer tools.
 
 ## Tech Stack
 
@@ -157,7 +157,6 @@ Run backend tests:
 npm test
 npm run test:coverage
 ```
-
 Run frontend tests and coverage:
 
 ```bash
@@ -171,6 +170,4 @@ Tests cover route success/error paths, every property filter, pagination, sortin
 ## Known Issues And Future Improvements
 
 - Some `L_Photos` URLs come from a protected third-party media service and may return `403` or `ERR_BLOCKED_BY_ORB` in a browser. A production system should proxy authorized media or store approved image copies.
-- Google Maps requires a valid key with Maps Embed API enabled and localhost restrictions configured. The app hides the map when coordinates are missing.
-- `frontend/build/` is intentionally ignored; run `npm run build` when a deployment artifact is needed.
 - Future work could add request cancellation with `AbortController`, stronger database migrations, and server-side media proxying.
