@@ -16,11 +16,16 @@ app.use(requestLogger);
 app.use("/api/health", healthRoutes);
 app.use("/api/properties", propertyRoutes);
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export the app so route tests can exercise it without opening a real port.
+module.exports = app;
 
-server.on("error", (error) => {
-  console.error("Server failed to start:", error.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
+  server.on("error", (error) => {
+    console.error("Server failed to start:", error.message);
+    process.exit(1);
+  });
+}

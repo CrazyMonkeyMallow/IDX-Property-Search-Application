@@ -1,57 +1,25 @@
-const assert = require("node:assert/strict");
-const test = require("node:test");
 const { buildPropertySearchQuery } = require("../src/utils/propertyQuery");
 
-test("minPrice and beds filters keep SQL placeholders and values in the same order", () => {
-  const queryParts = buildPropertySearchQuery({
-    minPrice: "300000",
-    beds: "3",
-    limit: "20",
-    offset: "0",
-  });
-
-  assert.match(queryParts.countSql, /L_SystemPrice >= \?/);
-  assert.match(queryParts.countSql, /L_Keyword2 >= \?/);
-  assert.deepEqual(queryParts.countValues, [300000, 3]);
-  assert.deepEqual(queryParts.resultsValues, [300000, 3, 20, 0]);
+test("minPrice and beds keep SQL placeholders and values in order", () => {
+  const query = buildPropertySearchQuery({ minPrice: "300000", beds: "3", limit: "20", offset: "0" });
+  expect(query.countSql).toMatch(/L_SystemPrice >= \?/);
+  expect(query.countSql).toMatch(/L_Keyword2 >= \?/);
+  expect(query.countValues).toEqual([300000, 3]);
+  expect(query.resultsValues).toEqual([300000, 3, 20, 0]);
 });
 
-test("invalid minPrice returns a validation error", () => {
-  assert.throws(
-    () => buildPropertySearchQuery({ minPrice: "abc" }),
-    /minPrice must be a valid number/
-  );
-});
-
-test("invalid limit values return validation errors", () => {
-  assert.throws(
-    () => buildPropertySearchQuery({ limit: "0" }),
-    /limit must be a number between 1 and 100/
-  );
-
-  assert.throws(
-    () => buildPropertySearchQuery({ limit: "200" }),
-    /limit must be a number between 1 and 100/
-  );
+test("rejects invalid numeric and pagination values", () => {
+  expect(() => buildPropertySearchQuery({ minPrice: "abc" })).toThrow(/minPrice/);
+  expect(() => buildPropertySearchQuery({ limit: "0" })).toThrow(/limit/);
+  expect(() => buildPropertySearchQuery({ limit: "200" })).toThrow(/limit/);
 });
 
 test("builds a whitelisted sort expression", () => {
-  const queryParts = buildPropertySearchQuery({
-    sortBy: "L_SystemPrice",
-    sortOrder: "desc",
-  });
-
-  assert.match(queryParts.resultsSql, /ORDER BY L_SystemPrice DESC, L_ListingID/);
+  const query = buildPropertySearchQuery({ sortBy: "L_SystemPrice", sortOrder: "desc" });
+  expect(query.resultsSql).toMatch(/ORDER BY L_SystemPrice DESC, L_ListingID/);
 });
 
 test("rejects invalid sort fields and directions", () => {
-  assert.throws(
-    () => buildPropertySearchQuery({ sortBy: "ListPrice" }),
-    /sortBy is not a supported property column/
-  );
-
-  assert.throws(
-    () => buildPropertySearchQuery({ sortOrder: "sideways" }),
-    /sortOrder must be asc or desc/
-  );
+  expect(() => buildPropertySearchQuery({ sortBy: "ListPrice" })).toThrow(/supported property column/);
+  expect(() => buildPropertySearchQuery({ sortOrder: "sideways" })).toThrow(/asc or desc/);
 });

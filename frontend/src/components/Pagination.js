@@ -1,4 +1,6 @@
 function getPageItems(currentPage, totalPages) {
+  // Keep the first and last pages visible while reducing large page ranges to
+  // a small, stable set of buttons around the current page.
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
   }

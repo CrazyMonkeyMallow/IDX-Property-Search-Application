@@ -55,6 +55,8 @@ function buildPropertySearchQuery(query) {
     throw new Error("sortOrder must be asc or desc");
   }
 
+  // Keep SQL text and values separate: placeholders prevent user input from
+  // becoming executable SQL while preserving the condition order.
   const conditions = [];
   const values = [];
 

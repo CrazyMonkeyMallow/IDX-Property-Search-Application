@@ -10,7 +10,11 @@ function ListingsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [activeFilters, setActiveFilters] = useState({});
+
+  
   const [sortBy, setSortBy] = useState("L_SystemPrice");
+
+
   const [sortOrder, setSortOrder] = useState("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");

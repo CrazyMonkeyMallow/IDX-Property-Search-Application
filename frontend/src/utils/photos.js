@@ -8,6 +8,8 @@ export function parsePhotos(photos) {
   }
 
   try {
+    // The MLS feed stores photos as a JSON string, so malformed feed data
+    // should produce an empty gallery instead of breaking the property page.
     const parsed = JSON.parse(photos);
     return Array.isArray(parsed)
       ? parsed.filter((photo) => typeof photo === "string" && photo.trim())

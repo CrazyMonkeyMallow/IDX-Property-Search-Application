@@ -3,3 +3,5 @@ node_modules/
 backend/.env
 frontend/.env
 frontend/build/
+coverage/
+frontend/coverage/
