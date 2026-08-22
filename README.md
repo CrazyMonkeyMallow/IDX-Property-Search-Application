@@ -26,7 +26,7 @@ Run the frontend locally and open `http://localhost:3000` to view the Listings p
 
 ```text
 frontend/src  -> React pages and components -> /api/* proxy
-                                              |
+
 src/server.js -> Express routes -> MySQL rets database
 ```
 
