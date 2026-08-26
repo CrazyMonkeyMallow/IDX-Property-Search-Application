@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
 import Pagination from "../components/Pagination";
+import useLatestRequest from "../hooks/useLatestRequest";
 
 function ListingsPage() {
   const [properties, setProperties] = useState([]);
@@ -18,10 +19,10 @@ function ListingsPage() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const requestId = useRef(0);
+  const { startRequest, isLatestRequest } = useLatestRequest();
 
   const loadProperties = useCallback(async (filters, page) => {
-    const currentRequestId = ++requestId.current;
+    const currentRequestId = startRequest();
 
     try {
       setIsLoading(true);
@@ -35,22 +36,22 @@ function ListingsPage() {
         sortOrder,
       });
 
-      if (currentRequestId === requestId.current) {
+      if (isLatestRequest(currentRequestId)) {
         setProperties(data.results || []);
         setTotal(data.total || 0);
       }
     } catch (error) {
-      if (currentRequestId === requestId.current) {
+      if (isLatestRequest(currentRequestId)) {
         setErrorMessage(error.message || "Unable to load properties");
         setProperties([]);
         setTotal(0);
       }
     } finally {
-      if (currentRequestId === requestId.current) {
+      if (isLatestRequest(currentRequestId)) {
         setIsLoading(false);
       }
     }
-  }, [itemsPerPage, sortBy, sortOrder]);
+  }, [isLatestRequest, itemsPerPage, sortBy, sortOrder, startRequest]);
 
   useEffect(() => {
     loadProperties(activeFilters, currentPage);
