@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import PropertyImageCarousel from "./PropertyImageCarousel";
 
 function formatPrice(price) {
@@ -63,5 +64,19 @@ function PropertyCard({ property }) {
     </article>
   );
 }
+
+PropertyCard.propTypes = {
+  property: PropTypes.shape({
+    listingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    address: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    beds: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    baths: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    sqft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    photos: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  }).isRequired,
+};
 
 export default PropertyCard;
