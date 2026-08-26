@@ -7,6 +7,8 @@ The main UI is available at `http://localhost:3000`. The backend API runs at `ht
 
 ### Screenshot
 Run the frontend locally and open `http://localhost:3000` to view the Listings page. 
+
+
 ![Property listings screenshot](screenshot.png)
 
 
@@ -167,6 +169,6 @@ npm test -- --watchAll=false --coverage
 
 Tests cover route success/error paths, every property filter, pagination, sorting, photo parsing, filter controls, property cards, and detail-page behavior. Coverage reports are written to `coverage/` directories.
 
-## Known Issues
+## Known Issues and Future Improvements
 
 - Some `L_Photos` URLs come from a protected third-party media service and may return `403` or `ERR_BLOCKED_BY_ORB` in a browser. (This is mainly because I am not in USA)
